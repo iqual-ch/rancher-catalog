@@ -26,7 +26,7 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
         - name: VIRTUAL_HOST
-          value: {{$equipment := .Values.ingress.hosts}}{{ range $index, $element := .Values.ingress.hosts}}{{if $index}},{{end}}{{$element.name}}{{end}}
+          value: ""
         ports:
         - name: http
           containerPort: 80
