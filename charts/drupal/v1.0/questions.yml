@@ -33,11 +33,13 @@ questions:
     - variable: iqapi.endpoint
       default: ""
       description: "iqual API endpoint"
+      type: string
       label: iqual API Endpoint
     - variable: iqapi.token
       default: ""
       description: "iqual API access token"
-      label: iqual
+      type: string
+      label: iqual API Access Token
 - variable: persistence.enabled
   default: "false"
   description: "Enable persistent volume for Drupal"
