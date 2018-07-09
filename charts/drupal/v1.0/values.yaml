@@ -1,0 +1,21 @@
+image:
+  repository: iqualch/dc-drupal
+  tag: latest
+  pullPolicy: Always
+  pullSecrets:
+    - iqual-docker-cloud
+iqapi:
+  wid:
+  endpoint:
+  token:
+ingress:
+  enabled: false
+  hosts:
+  - name:
+    annotations:
+    #  kubernetes.io/ingress.class: nginx
+    #  kubernetes.io/tls-acme: true
+persistence:
+  enabled: true
+  baseMount:
+nodeSelector: {}

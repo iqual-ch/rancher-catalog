@@ -1,0 +1,68 @@
+questions:
+- variable: defaultImage
+  default: "true"
+  description: "Use default Docker image"
+  label: Use Default Image
+  type: boolean
+  show_subquestion_if: false
+  group: "Container Images"
+  subquestions:
+  - variable: image.repository
+    default: "iqualch/dc-drupal"
+    description: "Drupal image name"
+    type: string
+    label: Drupal Image Name
+  - variable: image.tag
+    default: "latest"
+    description: "Drupal image tag"
+    type: string
+    label: Drupal Tag
+- variable: iqapi
+  default: "true"
+  description: "Enable iqual API"
+  label: iqual API
+  type: boolean
+  show_subquestion_if: true
+  group: "iqual API"
+  subquestions:
+    - variable: iqapi.wid
+      default: ""
+      description: "Website ID"
+      type: string
+      label: Website ID
+    - variable: iqapi.endpoint
+      default: ""
+      description: "iqual API endpoint"
+      label: iqual API Endpoint
+    - variable: iqapi.token
+      default: ""
+      description: "iqual API access token"
+      label: iqual
+- variable: persistence.enabled
+  default: "false"
+  description: "Enable persistent volume for Drupal"
+  type: boolean
+  required: true
+  label: Drupal Persistent Volume Enabled
+  show_subquestion_if: true
+  group: "Drupal Mount Settings"
+  subquestions:
+  - variable: persistence.baseMount
+    default: "/mnt/dummy_volume"
+    description: "Drupal Persistent Volume Mount Base"
+    type: string
+    label: Drupal Volume Mount
+- variable: ingress.enabled
+  default: "true"
+  description: "Expose app using Layer 7 Load Balancer - ingress"
+  type: boolean
+  label: Expose app using Layer 7 Load Balancer
+  show_subquestion_if: true
+  group: "Services and Load Balancing"
+  subquestions:
+  - variable: ingress.hosts[0].name
+    default: ""
+    description: "Additional hostnames to your Drupal installation"
+    type: hostname
+    required: true
+    label: Hostname

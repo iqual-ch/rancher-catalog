@@ -1,0 +1,66 @@
+apiVersion: apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+    spec:
+      {{- if .Values.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.image.pullSecrets }}
+        - name: {{ . }}
+      {{- end}}
+      {{- end }}
+      containers:
+      - name: {{ template "fullname" . }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        env:
+        - name: VIRTUAL_HOST
+          value: {{$equipment := .Values.ingress.hosts}}
+{{ range $index, $element := .Values.ingress.hosts}}
+    {{if $index}},{{end}}
+    {{$element.name}}
+{{end}}
+        ports:
+        - name: http
+          containerPort: 80
+        tty: true
+        volumeMounts:
+        - mountPath: /var/www
+          name: drupal-data
+        - mountPath: /var/log/nginx-drupal
+          name: drupal-logs
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+      restartPolicy: Always
+      volumes:
+      - name: drupal-data
+      {{- if .Values.persistence.enabled }}
+        hostPath:
+          path: {{ .Values.persistence.baseMount }}/www/drupal/{{ template "fullname" . }}
+          type: ""
+      {{- else }}
+        emptyDir: {}
+      {{ end }}
+      - name: drupal-logs
+      {{- if .Values.persistence.enabled }}
+        hostPath:
+          path: {{ .Values.persistence.baseMount }}/logs/{{ template "fullname" . }}
+          type: ""
+      {{- else }}
+        emptyDir: {}
+      {{ end }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+      {{- end -}}
