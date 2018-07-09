@@ -5,17 +5,17 @@ image:
   pullSecrets:
     - iqual-docker-cloud
 iqapi:
-  wid:
-  endpoint:
-  token:
+  wid: ""
+  endpoint: ""
+  token: ""
 ingress:
   enabled: false
   hosts:
-  - name:
+  - name: drupal.local
     annotations:
-    #  kubernetes.io/ingress.class: nginx
+      kubernetes.io/ingress.class: nginx
     #  kubernetes.io/tls-acme: true
 persistence:
   enabled: true
-  baseMount:
+  baseMount: "/mnt/dummy_volume"
 nodeSelector: {}
