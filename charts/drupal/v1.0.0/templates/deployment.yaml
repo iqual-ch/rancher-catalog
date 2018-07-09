@@ -30,6 +30,12 @@ spec:
         env:
         - name: VIRTUAL_HOST
           value: ""
+        - name: IQAPI_WID
+          value: {{ .Values.iqapi.wid | quote }}
+        - name: IQAPI_ENDPOINT
+          value: {{ .Values.iqapi.endpoint | quote }}
+        - name: IQAPI_AUTH
+          value: {{ .Values.iqapi.auth | quote }}
         ports:
         - name: http
           containerPort: 80
