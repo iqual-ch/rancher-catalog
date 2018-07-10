@@ -10,8 +10,9 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "0"
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
 spec:
+  activeDeadlineSeconds: 600
   backoffLimit: 1
   template:
     metadata:
