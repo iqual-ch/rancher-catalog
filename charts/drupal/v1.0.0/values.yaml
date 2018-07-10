@@ -13,9 +13,9 @@ iqapi:
 
 autoInstall:
   enabled: false
-  baseMount: "/mnt/dummy_volume"
+  baseMount: /mnt/dummy_volume
   source: /repo
-  file: *
+  file: ""
   dbHost: master-db
   dbSecret: master-db-access
 
@@ -29,6 +29,6 @@ ingress:
 
 persistence:
   enabled: true
-  baseMount: "/mnt/dummy_volume"
+  baseMount: /mnt/dummy_volume
 
 nodeSelector: {}
