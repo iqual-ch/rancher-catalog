@@ -14,10 +14,10 @@ iqapi:
 autoInstall:
   enabled: false
   baseMount: "/mnt/dummy_volume"
-  source: "/repo"
-  file: "*"
-  dbHost: "master-db"
-  dbSecret: "master-db-access"
+  source: /repo
+  file: *
+  dbHost: master-db
+  dbSecret: master-db-access
 
 ingress:
   enabled: false
