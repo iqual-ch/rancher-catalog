@@ -61,6 +61,8 @@ spec:
         env:
         - name: WEBSITE_PREFIX
           value: "{{ template "name" . }}"
+        - name: BASEPATH
+          value: "/var/www/"
         - name: MYSQL_DRUPAL_HOST
           value: {{ .Values.autoInstall.dbHost | quote }}
         - name: MYSQL_ROOT_PASSWORD
