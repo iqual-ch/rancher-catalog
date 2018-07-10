@@ -12,7 +12,6 @@ metadata:
     "helm.sh/hook-weight": "0"
     "helm.sh/hook-delete-policy": hook-succeeded
 spec:
-  activeDeadlineSeconds: 600
   backoffLimit: 1
   template:
     metadata:
