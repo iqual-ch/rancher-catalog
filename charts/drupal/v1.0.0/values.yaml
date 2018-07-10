@@ -6,9 +6,18 @@ image:
     - iqual-docker-cloud
 
 iqapi:
+  enabled: false
   wid: ""
   endpoint: ""
   token: ""
+
+autoInstall:
+  enabled: false
+  baseMount: "/mnt/dummy_volume"
+  source: "/repo"
+  file: "*"
+  dbHost: "master-db"
+  dbSecret: "master-db-access"
 
 ingress:
   enabled: false

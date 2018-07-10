@@ -1,0 +1,62 @@
+{{- if .Values.autoInstall.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "fullname" . }}-init
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+  annotations:
+    "helm.sh/hook": "pre-install"
+spec:
+  activeDeadlineSeconds: 600
+  selector:
+    matchLabels:
+      app: {{ template "fullname" . }}-init
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}-init
+    spec:
+      containers:
+      - name: {{ template "fullname" . }}-init
+        image: "iqualch/dc-drupal-init:latest"
+        imagePullPolicy: "Always"
+        env:
+        - name: WEBSITE_PREFIX
+          value: "{{ template "name" . }}"
+        - name: MYSQL_DRUPAL_HOST
+          value: {{ .Value.autoInstall.dbHost | quote }}
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Value.autoInstall.dbSecret | quote }}
+              key: MYSQL_ROOT_PASSWORD
+        ports:
+        - name: http
+          containerPort: 80
+        tty: true
+        volumeMounts:
+        - mountPath: /var/repo
+          name: drupal-repo
+        - mountPath: /var/www
+          name: drupal-data
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+      restartPolicy: Never
+      volumes:
+      - name: drupal-repo
+        hostPath:
+          path: {{ .Values.autoInstall.baseMount }}{{ .Values.autoInstall.source }}
+          type: ""
+      - name: drupal-data
+        hostPath:
+          path: {{ .Values.persistence.baseMount }}/www/drupal
+          type: ""
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+      {{- end -}}
+{{- end }}
