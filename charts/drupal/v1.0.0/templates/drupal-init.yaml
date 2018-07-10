@@ -4,17 +4,23 @@ kind: Job
 metadata:
   name: {{ template "fullname" . }}-init
   labels:
-    app: {{ template "fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
   annotations:
-    "helm.sh/hook": "pre-install"
-    "helm.sh/hook-delete-policy": "hook-succeeded"
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   activeDeadlineSeconds: 600
   backoffLimit: 1
   template:
+    metadata:
+      name: {{ template "fullname" . }}-init
+      labels:
+        heritage: {{.Release.Service | quote }}
+        release: {{.Release.Name | quote }}
+        chart: "{{.Chart.Name}}-{{.Chart.Version}}"
     spec:
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
@@ -22,6 +28,7 @@ spec:
         - name: {{ . }}
       {{- end }}
       {{- end }}
+      restartPolicy: Never
       containers:
       - name: {{ template "fullname" . }}-init
         image: "iqualch/dc-drupal-init:latest"
@@ -47,7 +54,6 @@ spec:
           name: drupal-data
         resources:
 {{ toYaml .Values.resources | indent 10 }}
-      restartPolicy: Never
       volumes:
       - name: drupal-repo
         hostPath:
