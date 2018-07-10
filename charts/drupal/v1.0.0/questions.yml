@@ -17,7 +17,7 @@ questions:
     description: "Drupal image tag"
     type: string
     label: Drupal Tag
-- variable: iqapi
+- variable: iqapi.enabled
   default: "true"
   description: "Enable iqual API"
   label: iqual API
