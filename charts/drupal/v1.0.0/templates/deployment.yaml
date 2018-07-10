@@ -36,7 +36,7 @@ spec:
         - name: IQAPI_ENDPOINT
           value: {{ .Values.iqapi.endpoint | quote }}
         - name: IQAPI_AUTH
-          value: {{ .Values.iqapi.auth | quote }}
+          value: {{ .Values.iqapi.token | quote }}
         {{- end }}
         ports:
         - name: http
