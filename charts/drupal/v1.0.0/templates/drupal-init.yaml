@@ -28,11 +28,11 @@ spec:
         - name: WEBSITE_PREFIX
           value: "{{ template "name" . }}"
         - name: MYSQL_DRUPAL_HOST
-          value: {{ .Value.autoInstall.dbHost | quote }}
+          value: {{ .Values.autoInstall.dbHost | quote }}
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Value.autoInstall.dbSecret | quote }}
+              name: {{ .Values.autoInstall.dbSecret | quote }}
               key: MYSQL_ROOT_PASSWORD
         ports:
         - name: http
