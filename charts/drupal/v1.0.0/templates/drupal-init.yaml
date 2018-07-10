@@ -12,13 +12,7 @@ metadata:
     "helm.sh/hook": "pre-install"
 spec:
   activeDeadlineSeconds: 600
-  selector:
-    matchLabels:
-      app: {{ template "fullname" . }}-init
   template:
-    metadata:
-      labels:
-        app: {{ template "fullname" . }}-init
     spec:
       containers:
       - name: {{ template "fullname" . }}-init
