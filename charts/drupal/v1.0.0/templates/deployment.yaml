@@ -21,7 +21,7 @@ spec:
       imagePullSecrets:
       {{- range .Values.image.pullSecrets }}
         - name: {{ . }}
-      {{- end}}
+      {{- end }}
       {{- end }}
       containers:
       - name: {{ template "fullname" . }}
@@ -30,12 +30,14 @@ spec:
         env:
         - name: VIRTUAL_HOST
           value: ""
+        {{- if .Values.iqapi.enabled }}
         - name: IQAPI_WID
           value: {{ .Values.iqapi.wid | quote }}
         - name: IQAPI_ENDPOINT
           value: {{ .Values.iqapi.endpoint | quote }}
         - name: IQAPI_AUTH
           value: {{ .Values.iqapi.auth | quote }}
+        {{- end }}
         ports:
         - name: http
           containerPort: 80
