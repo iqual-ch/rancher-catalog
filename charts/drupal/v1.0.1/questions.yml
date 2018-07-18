@@ -1,0 +1,103 @@
+questions:
+- variable: defaultImage
+  default: "true"
+  description: "Use default Docker image"
+  label: Use Default Image
+  type: boolean
+  show_subquestion_if: false
+  group: "Container Images"
+  subquestions:
+  - variable: image.repository
+    default: "iqualch/dc-drupal"
+    description: "Drupal image name"
+    type: string
+    label: Drupal Image Name
+  - variable: image.tag
+    default: "latest"
+    description: "Drupal image tag"
+    type: string
+    label: Drupal Tag
+- variable: iqapi.enabled
+  default: "false"
+  description: "Enable iqual API"
+  label: iqual API
+  type: boolean
+  show_subquestion_if: true
+  group: "iqual API"
+  subquestions:
+  - variable: iqapi.wid
+    default: ""
+    description: "Website ID"
+    type: string
+    label: Website ID
+  - variable: iqapi.endpoint
+    default: ""
+    description: "iqual API endpoint"
+    type: string
+    label: iqual API Endpoint
+  - variable: iqapi.token
+    default: ""
+    description: "iqual API access token"
+    type: string
+    label: iqual API Access Token
+- variable: autoInstall.enabled
+  default: "false"
+  description: "Enable automatic Installation of Drupal from Repo file"
+  label: Automatic Drupal Installation from Repo
+  type: boolean
+  show_subquestion_if: true
+  group: "Auto-Installation"
+  subquestions:
+  - variable: autoInstall.baseMount
+    default: "/mnt/dummy_volume"
+    description: "Volume mount path of Drupal repository"
+    type: string
+    label: Drupal Repository Mount
+  - variable: autoInstall.source
+    default: "/repo"
+    description: "Repository source path"
+    type: string
+    label: Repository Source Path
+  - variable: autoInstall.file
+    default: "*"
+    description: "Repository file"
+    type: string
+    label: Repository File
+  - variable: autoInstall.dbHost
+    default: "master-db"
+    description: "Drupal database hostname"
+    type: string
+    label: Database Host
+  - variable: autoInstall.dbSecret
+    default: "master-db-access"
+    description: "MySQL root password secret"
+    type: string
+    label: Database Password Secret
+- variable: persistence.enabled
+  default: "false"
+  description: "Enable persistent volume for Drupal"
+  type: boolean
+  required: true
+  label: Drupal Persistent Volume Enabled
+  show_subquestion_if: true
+  group: "Drupal Mount Settings"
+  subquestions:
+  - variable: persistence.baseMount
+    default: "/mnt/dummy_volume"
+    description: "Drupal Persistent Volume Mount Base"
+    type: string
+    label: Drupal Volume Mount
+- variable: ingress.enabled
+  default: "true"
+  description: "Expose app using Layer 7 Load Balancer - ingress"
+  type: boolean
+  label: Expose app using Layer 7 Load Balancer
+  show_subquestion_if: true
+  group: "Ingress"
+  subquestions:
+  - variable: ingress.hosts[0].name
+    default: ""
+    description: "Additional hostnames to your Drupal installation"
+    type: hostname
+    required: true
+    label: Hostname
