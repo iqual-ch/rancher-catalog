@@ -93,7 +93,7 @@ questions:
   type: boolean
   label: Expose app using Layer 7 Load Balancer
   show_subquestion_if: true
-  group: "Services and Load Balancing"
+  group: "Ingress"
   subquestions:
   - variable: ingress.hosts[0].name
     default: ""
@@ -101,3 +101,15 @@ questions:
     type: hostname
     required: true
     label: Hostname
+  - variable: ingress.hosts[0].tls
+    default: "true"
+    description: "Enable automatic Let's Encrypt Certificate generation"
+    type: boolean
+    required: true
+    label: Automatic SSL Certificate Generation
+- variable: ingress.certissuer
+  default: "letsencrypt"
+  description: "SSL Certificate Issuer"
+  type: string
+  label: SSL Certificate Issuer
+  group: "Ingress"

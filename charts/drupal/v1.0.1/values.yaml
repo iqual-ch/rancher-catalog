@@ -21,11 +21,12 @@ autoInstall:
 
 ingress:
   enabled: false
+  certissuer: "letsencrypt"
   hosts:
   - name: drupal.local
     annotations:
       kubernetes.io/ingress.class: nginx
-    #  kubernetes.io/tls-acme: true
+    tls: true
 
 persistence:
   enabled: true
