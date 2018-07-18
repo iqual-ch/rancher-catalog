@@ -11,7 +11,7 @@ metadata:
     heritage: "{{ $.Release.Service }}"
   annotations:
     {{- if .tls }}
-    certmanager.k8s.io/issuer: {{ $.Values.ingress.certissuer | quote }}
+    certmanager.k8s.io/clusterissuer: {{ $.Values.ingress.certissuer | quote }}
     {{- end }}
     {{- range $key, $value := .annotations }}
     {{ $key }}: {{ $value | quote }}

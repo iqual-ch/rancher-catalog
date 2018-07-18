@@ -109,7 +109,7 @@ questions:
     label: Automatic SSL Certificate Generation
 - variable: ingress.certissuer
   default: "letsencrypt"
-  description: "SSL Certificate Issuer"
+  description: "Cluster SSL Certificate Issuer"
   type: string
-  label: SSL Certificate Issuer
+  label: Cluster SSL Certificate Issuer
   group: "Ingress"
