@@ -21,7 +21,7 @@ autoInstall:
 
 ingress:
   enabled: false
-  certissuer: "letsencrypt"
+  certissuer: "letsencrypt-prod"
   hosts:
   - name: drupal.local
     annotations:
