@@ -107,6 +107,24 @@ questions:
     type: boolean
     required: true
     label: Automatic SSL Certificate Generation
+  - variable: ingress.hosts[0].tlsType
+    default: "default"
+    description: "Type of certificate to use"
+    type: enum
+    required: false
+    label: Certificate Type
+    show_if: "ingress.hosts[0].tls=true"
+    options:
+    - "default"
+    - "auto"
+    - "custom"
+  - variable: ingress.hosts[0].tlsCustom
+    default: "cluster-default"
+    description: "Custom TLS Secret"
+    show_if: "ingress.hosts[0].tlsType=custom"
+    type: string
+    required: false
+    label: Custom TLS Secret
 - variable: ingress.certissuer
   default: "letsencrypt-prod"
   description: "Cluster SSL Certificate Issuer"

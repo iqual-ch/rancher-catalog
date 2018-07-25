@@ -27,6 +27,8 @@ ingress:
     annotations:
       kubernetes.io/ingress.class: nginx
     tls: true
+    tlsType: default
+    tlsCustom: cluster-default
 
 persistence:
   enabled: true
