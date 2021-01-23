@@ -10,7 +10,7 @@ metadata:
     release: "{{ $.Release.Name }}"
     heritage: "{{ $.Release.Service }}"
   annotations:
-    {{- if (and (.tls) (eq .tlsType "auto")) }}
+    {{- if (and (.tls) (eq (default .tlsType "auto") "auto")) }}
     cert-manager.io/cluster-issuer: {{ $.Values.ingress.certissuer | quote }}
     {{- end }}
     {{- range $key, $value := .annotations }}
@@ -29,9 +29,9 @@ spec:
   tls:
   - hosts:
     - {{ .name }}
-    {{ if eq .tlsType "auto" }}
+    {{ if eq (default .tlsType "auto") "auto" }}
     secretName: {{ .name | replace "." "-" }}-autogen
-    {{- else }}
+    {{- else if .tlsCustom }}
     secretName: {{ .tlsCustom }}
     {{- end }}
 {{- end }}
