@@ -37,9 +37,6 @@ spec:
         ports:
         - name: http
           containerPort: 80
-        resources:
-          requests:
-            memory: 100Mi
         tty: true
         volumeMounts:
         - mountPath: /var/www
@@ -71,8 +68,6 @@ spec:
           name: drupal-repo
         - mountPath: /var/www
           name: drupal-data
-        resources:
-{{ toYaml .Values.resources | indent 10 }}
       {{- end }}
       restartPolicy: Always
       volumes:

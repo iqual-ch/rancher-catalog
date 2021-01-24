@@ -30,6 +30,10 @@ persistence:
   enabled: true
   baseMount: /mnt/local
 
+resources:
+  requests:
+    memory: 100Mi
+
 nodeSelection:
   enabled: false
   selector: {}
