@@ -13,6 +13,9 @@ metadata:
     {{- if (and (.tls) (eq (default .tlsType "auto") "auto")) }}
     cert-manager.io/cluster-issuer: {{ $.Values.ingress.certissuer | quote }}
     {{- end }}
+    {{- range $key, $value := $.Values.ingress.defaultAnnotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
     {{- range $key, $value := .annotations }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
