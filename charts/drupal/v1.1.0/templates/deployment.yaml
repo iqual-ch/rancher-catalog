@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+    spec:
+      {{- if .Values.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.image.pullSecrets }}
+        - name: {{ . }}
+      {{- end }}
+      {{- end }}
+      containers:
+      - name: {{ template "fullname" . }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        env:
+        - name: VIRTUAL_HOST
+        {{- if .Values.ingress.enabled }}
+          value: {{$equipment := .Values.ingress.hosts}}{{ range $index, $element := .Values.ingress.hosts}}{{if $index}},{{end}}{{$element.name}}{{end}}
+        {{- else }}
+          value: ""
+        {{- end }}
+        ports:
+        - name: http
+          containerPort: 80
+        tty: true
+        volumeMounts:
+        - mountPath: /var/www
+          name: drupal-data
+        - mountPath: /project
+          name: drupal-project
+        - mountPath: /var/log/nginx-drupal
+          name: drupal-logs
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+      {{- if .Values.autoInstall.enabled }}
+      initContainers:
+      - name: {{ template "fullname" . }}-init
+        image: "iqualch/dc-drupal-init:latest"
+        imagePullPolicy: "Always"
+        env:
+        - name: WEBSITE_PREFIX
+          value: "{{ template "name" . }}"
+        - name: BASEPATH
+          value: "/var/www"
+        - name: MYSQL_DRUPAL_HOST
+          value: {{ .Values.autoInstall.dbHost | quote }}
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.autoInstall.dbSecret | quote }}
+              key: MYSQL_ROOT_PASSWORD
+        tty: true
+        volumeMounts:
+        - mountPath: /var/repo
+          name: drupal-repo
+        - mountPath: /var/www
+          name: drupal-data
+      {{- end }}
+      restartPolicy: Always
+      volumes:
+      - name: drupal-data
+      {{- if .Values.persistence.enabled }}
+        hostPath:
+          path: {{ .Values.persistence.baseMount }}/www/drupal/{{ template "fullname" . }}/project/app
+          type: ""
+      {{- else }}
+        emptyDir: {}
+      {{ end }}
+      - name: drupal-project
+      {{- if .Values.persistence.enabled }}
+        hostPath:
+          path: {{ .Values.persistence.baseMount }}/www/drupal/{{ template "fullname" . }}/project
+          type: ""
+      {{- else }}
+        emptyDir: {}
+      {{ end }}
+      - name: drupal-logs
+      {{- if .Values.persistence.enabled }}
+        hostPath:
+          path: {{ .Values.persistence.baseMount }}/logs/{{ template "fullname" . }}
+          type: ""
+      {{- else }}
+        emptyDir: {}
+      {{ end }}
+      {{- if .Values.autoInstall.enabled }}
+      - name: drupal-repo
+        hostPath:
+          path: {{ .Values.autoInstall.baseMount }}{{ .Values.autoInstall.source }}
+          type: ""
+      {{- end }}
+    {{- if (and (.Values.nodeSelection.enabled) (.Values.nodeSelection.selector)) }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelection.selector | indent 8 }}
+      {{- end -}}

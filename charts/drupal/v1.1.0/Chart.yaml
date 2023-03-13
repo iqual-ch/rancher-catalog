@@ -1,0 +1,10 @@
+apiVersion: v1
+name: drupal
+version: 1.1.0
+appVersion: 9.5.4
+home: https://www.iqual.ch
+maintainers:
+  - name: iqual
+    email: support@iqual.ch
+    url: https://www.iqual.ch
+engine: gotpl
