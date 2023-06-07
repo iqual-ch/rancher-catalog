@@ -1,0 +1,73 @@
+rancher_min_version: 2.5.0
+questions:
+- variable: defaultImage
+  default: "true"
+  description: "Use default Docker image"
+  label: Use Default Image
+  type: boolean
+  show_subquestion_if: false
+  group: "Container Images"
+  subquestions:
+  - variable: image.repository
+    default: "iqualch/dc-drupal"
+    description: "Drupal image name"
+    type: string
+    label: Drupal Image Name
+  - variable: image.tag
+    default: "nginx-php7.3"
+    description: "Drupal image tag"
+    type: string
+    label: Drupal Tag
+- variable: persistence.enabled
+  default: "false"
+  description: "Enable persistent volume for Drupal"
+  type: boolean
+  required: true
+  label: Drupal Persistent Volume Enabled
+  show_subquestion_if: true
+  group: "Filesystem"
+  subquestions:
+  - variable: persistence.baseMount
+    default: "/mnt/local"
+    description: "Drupal Persistent Volume Mount Base"
+    type: string
+    label: Drupal Volume Mount
+- variable: ingress.enabled
+  default: "true"
+  description: "Expose app using Layer 7 Load Balancer"
+  type: boolean
+  label: Ingress
+  show_subquestion_if: true
+  group: "Ingress"
+  subquestions:
+  - variable: ingress.hosts[0].name
+    default: ""
+    description: "Additional hostnames to your Drupal installation"
+    type: hostname
+    required: true
+    label: Hostname
+  - variable: ingress.hosts[0].tls
+    default: "true"
+    description: "Enable automatic Let's Encrypt Certificate generation"
+    type: boolean
+    required: true
+    label: Automatic SSL Certificate Generation
+- variable: ingress.certissuer
+  default: "letsencrypt-prod"
+  description: "Cluster SSL Certificate Issuer"
+  type: string
+  label: Cluster SSL Certificate Issuer
+  group: "Ingress"
+- variable: nodeSelection.enabled
+  default: "false"
+  description: "Restrict app deployment to specific server"
+  type: boolean
+  label: Node Selection Enabled
+  show_subquestion_if: true
+  group: "Node Selection"
+  subquestions:
+  - variable: nodeSelection.selector.role
+    default: ""
+    description: "Specify specific node role"
+    type: string
+    label: "Node Role"
