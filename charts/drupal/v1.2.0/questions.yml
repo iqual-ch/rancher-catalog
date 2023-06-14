@@ -18,6 +18,16 @@ questions:
     description: "Drupal image tag"
     type: string
     label: Drupal Tag
+- variable: drupalEnvironment
+  default: "stage"
+  description: "The deployment environment."
+  label: Drupal Environment
+  type: enum
+  group: "Drupal Environment"
+  options:
+  - "dev"
+  - "stage"
+  - "prod"
 - variable: persistence.enabled
   default: "false"
   description: "Enable persistent volume for Drupal"

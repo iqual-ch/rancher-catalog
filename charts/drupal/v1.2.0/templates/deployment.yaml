@@ -28,6 +28,8 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
+        - name: DRUPAL_ENVIRONMENT
+          value: {{ .Values.drupalEnvironment }}
         - name: VIRTUAL_HOST
         {{- if .Values.ingress.enabled }}
           value: {{$equipment := .Values.ingress.hosts}}{{ range $index, $element := .Values.ingress.hosts}}{{if $index}},{{end}}{{$element.name}}{{end}}
